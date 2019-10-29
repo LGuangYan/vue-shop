@@ -16,9 +16,12 @@
                         >
                         <span>{{cate.name}}</span>
                     </li>
-                    
                 </ul>
             </div>
+            <div class="rightWrapper">
+                <ContentView :getCategoriesDetailsData="getCategoriesDetailsData"/>
+            </div>
+           
         </div>
         <van-loading
             v-else
@@ -26,22 +29,25 @@
             style="position: absolute; left: 50%; top: 40%; transform: translate(-50%);"
             >数据拼命加载中...
         </van-loading>
+        
     </div>
 </template>
 <script>
 import SHeader from './components/Header'
+import ContentView from './components/ContentView'
 import BScoll from 'better-scroll'
 import { getCategories, getCategoriesDetails } from './../../api/index' 
 import { Loading } from 'vant'
 export default {
     components: {
         [Loading.name]: Loading,
-        SHeader
+        SHeader,
+        ContentView
     },
     data() {
         return {
             //是否显示加载loading
-            isShowLoading: false,
+            isShowLoading: true,
             getCategoriesData: [],
             getCategoriesDetailsData: [],
             //left 选中
@@ -71,6 +77,7 @@ export default {
             //4.初始化滚动框架
             this.$nextTick(()=>{
                 this.leftScroll = new BScoll('.leftWrapper',{probeType: 3})
+                this.rightScroll = new BScoll('.rightWrapper',{probeType: 3})
             })
         },
         //2.处理left click
@@ -90,10 +97,8 @@ export default {
             if(rightRes.success) {
                 this.getCategoriesDetailsData = rightRes.data.cate
             }
- 
         }
     }
-    
 }
 </script>
 
@@ -102,13 +107,12 @@ export default {
     #categroy {
         width: 100%;
         height: 100%;
-        background: rebeccapurple;
         font-size: .12rem;
         overflow: hidden;
         .listWraaper{
             width: 100%;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             overflow: hidden;
             position: absolute;
             top: .44rem;
@@ -125,6 +129,7 @@ export default {
                         display: flex;
                         align-items: center;
                         justify-content: center;
+                        border-bottom: 1px solid #eee;
                         span{
                             width: 100%;
                             text-align: center;
@@ -135,10 +140,9 @@ export default {
                     .selectItem{
                         background: #fff;
                         span{
-                            color: #3cb963;
-                            border-left: 2px solid #3cb963;
+                            color: #fe625f;
+                            border-left: 2px solid #fe625f;
                             font-weight: 900; 
-                            
                         }
                     }
                     

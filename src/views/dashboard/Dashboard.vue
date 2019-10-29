@@ -34,7 +34,7 @@ export default {
   },
   data() {
     return {
-      active: 0,
+      active: Number(sessionStorage.getItem('tabBarActiveIndex')) || 0,
       home_icon: {
         normal: require('@/images/tabbar/home_default.png'),
         active: require('@/images/tabbar/home_selected.png'),
@@ -51,9 +51,16 @@ export default {
         normal: require('@/images/tabbar/mine_default.png'),
         active: require('@/images/tabbar/mine_selected.png'),
       },
-    };
+    }
+  },
+  watch: {
+    active(val) {
+      let tabBarActiveIndex = val > 0 ? val : 0
+      //缓存到本地
+      sessionStorage.setItem('tabBarActiveIndex', val)
+    }
   }
-};
+}
 </script>
 
 
@@ -61,7 +68,6 @@ export default {
 #dashboard {
   width: 100%;
   height: 100%;
-  background: yellow;
   img{
     height: .22rem;
   }

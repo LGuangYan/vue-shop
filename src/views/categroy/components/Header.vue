@@ -21,6 +21,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+        border-bottom: 1px solid #f5f5f5;
         .headerBox{
             width: 95%;
             height: .32rem;

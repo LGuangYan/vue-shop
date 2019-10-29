@@ -48,20 +48,6 @@ export default {
   created() {
     //请求网络数据
     this.reqData()
-    // getHomeData()
-    //   .then(response => {
-    //     if (response.success) {
-    //       this.swiper_list = response.data.list[0].icon_list
-    //       this.nav_list = response.data.list[2].icon_list
-    //       this.flash_sale_product_list = response.data.list[3].product_list
-    //       this.you_like_product_list = response.data.list[12].product_list
-    //       //隐藏加载loading
-    //       this.isShowLoading = false
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   })
   },
   methods: {
     async reqData() {
