@@ -6,54 +6,26 @@
         </header>
         <div class="cartContent">
             <ul>
-                <li>
+                <li v-for="(goods, index) in shopCart" :key="index">
                     <div class="left">
-                        <van-checkbox v-model="checked" checked-color="#fe625f"></van-checkbox>
+                        <van-checkbox v-model="goods.checked" checked-color="#fe625f"></van-checkbox>
                     </div>
                     <div class="center">
-                        <img src="https://img.alicdn.com/bao/uploaded/i3/3193724813/TB2rg1uaN6I8KJjSszfXXaZVXXa_!!3193724813.jpg" alt="">
+                        <img :src="goods.small_image" alt="">
                     </div>
                     <div class="right">
-                        <h2>范德萨范德萨范德萨发生的方式地方</h2>
-                        <h6>山东省打算的撒的撒的撒的撒打算的撒的撒的撒的撒打算的撒打算的撒打算的撒的</h6>
-                        <span>2122</span>
+                        <h2>{{goods.name}}</h2>
+                        
+                        <span>{{goods.price | moneyFormat}}</span>
                         <div class="cartStepper">
-                            <van-stepper v-model="value" button-size="22" />
+                            <van-stepper
+                                v-model="value" 
+                                button-size="22"
+                               
+                                />
                         </div>
                     </div>
-                </li>
-                <li>
-                    <div class="left">
-                        <van-checkbox v-model="checked" checked-color="#fe625f"></van-checkbox>
-                    </div>
-                    <div class="center">
-                        <img src="https://img.alicdn.com/bao/uploaded/i3/3193724813/TB2rg1uaN6I8KJjSszfXXaZVXXa_!!3193724813.jpg" alt="">
-                    </div>
-                    <div class="right">
-                        <h2>范德萨范德萨范德萨发生的方式地方</h2>
-                        <h6>山东省打算的撒的撒的撒的撒打算的撒的撒的撒的撒打算的撒打算的撒打算的撒的</h6>
-                        <span>2122</span>
-                        <div class="cartStepper">
-                            <van-stepper v-model="value" button-size="22" />
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="left">
-                        <van-checkbox v-model="checked" checked-color="#fe625f"></van-checkbox>
-                    </div>
-                    <div class="center">
-                        <img src="https://img.alicdn.com/bao/uploaded/i3/3193724813/TB2rg1uaN6I8KJjSszfXXaZVXXa_!!3193724813.jpg" alt="">
-                    </div>
-                    <div class="right">
-                        <h2>范德萨范德萨范德萨发生的方式地方</h2>
-                        <h6>山东省打算的撒的撒的撒的撒打算的撒的撒的撒的撒打算的撒打算的撒打算的撒的</h6>
-                        <span>2122</span>
-                        <div class="cartStepper">
-                            <van-stepper v-model="value" button-size="22" />
-                        </div>
-                    </div>
-                </li>
+                </li>    
             </ul>
         </div>
         <div class="cartToolBar">
@@ -61,13 +33,13 @@
                 <van-checkbox v-model="checked" checked-color="#fe625f">全选</van-checkbox>
             </div>
             <div class="tCenter">总计：<span>2000</span></div>
-            <div class="tRight">结算</div>
+            <div class="tRight">结算(9)</div>
         </div>
     </div>
 </template>
 <script> 
-import { Checkbox } from 'vant'
-import { Stepper } from 'vant'
+import { Checkbox, Stepper } from 'vant'
+import { mapState } from 'vuex'
 export default {
     components: {
         [Checkbox.name]: Checkbox,
@@ -78,7 +50,14 @@ export default {
             checked: true,
             value: 1
         }
-    }    
+    },
+    computed: {
+        ...mapState(['shopCart'])
+    },
+    methods: {
+       
+    }
+
 }
 </script>
 
@@ -115,15 +94,16 @@ export default {
             margin-top: .1rem;
             flex: 1;
             background: #fff;
+             overflow: hidden;
             ul{
                 height: 100%;
-                overflow: hidden;
+                overflow-y: scroll;
                 li{
                     height: .9rem;
                     display: flex;
                     padding: .05rem 0;
                     border-bottom: 1px solid #f5f5f5;
-
+                    
                     .left{
                         display: flex;
                         align-items: center;
@@ -133,26 +113,27 @@ export default {
                         width: .9rem;
                         display: flex;
                         align-items: center;
+                        padding: .05rem;
                         img{
                             width: 100%;
                         }
                     }
                     .right{
+                        width: 100%;
                         padding: 0 .1rem;
                         position: relative;
                         h2{
                             font-size: .14rem;
                         }
-                        h6{
-                            font-size: .12rem;
-                            color: #989898;
-                        }
+                         
                         span{
                             display: block;
                             font-size: .13rem;
                             font-weight: 500;
                             line-height: .3rem;
                             color: #fe625f;
+                            position: absolute;
+                            bottom: 0;
                         }
                         .cartStepper{
                             position: absolute;

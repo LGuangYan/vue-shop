@@ -12,15 +12,22 @@
           <span class="pic">{{product.price | moneyFormat}}</span>
           <span class="oPic">{{product.origin_price | moneyFormat}}</span>
         </div>
-        <i class="icfont">&#xe68e;</i>
+        <i class="icfont" @click="addToCart(product)">&#xe68e;</i>
       </div>
     </div>
   </div>
 </template>
 <script>
+import PubSub from 'pubsub-js'
 export default {
     props: {
         product: Object
+    },
+    methods: {
+      addToCart(goods) {
+        // console.log(goods)
+        PubSub.publish('homeAddToCart', goods)
+      }
     }
 }
 </script>

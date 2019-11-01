@@ -8,15 +8,23 @@
                 <h2>{{item.product_name}}</h2>
                 <h6>{{item.spec}}</h6>
                 <span>{{item.price | moneyFormat}}</span>
-                <i class="icfont">&#xe68e;</i>
+                <i class="icfont" @click="addToCart(item)">&#xe68e;</i>
             </div>
         </div>
     </div>
 </template>
 <script>
+import PubSub from 'pubsub-js'
 export default {
   props: {
     products: Array
+  },
+  methods: {
+    
+    addToCart(goods){
+      PubSub.publish('categroyAddToCart', goods)
+      console.log('dsadasdsadasdsadasdsadas')
+    }
   }
 }
 </script>
@@ -69,6 +77,7 @@ export default {
       background: #fe625f;
       color: #fff;
       font-weight: bold;
+      z-index: 99999;
     }
   }
 }

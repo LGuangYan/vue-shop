@@ -37,10 +37,17 @@ import SHeader from './components/Header'
 import ContentView from './components/ContentView'
 import BScoll from 'better-scroll'
 import { getCategories, getCategoriesDetails } from './../../api/index' 
-import { Loading } from 'vant'
+import { Loading, Toast } from 'vant'
+
+//通知订阅插件
+import PubSub from 'pubsub-js' 
+//引入Vuex
+import { mapMutations } from 'vuex'
+
 export default {
     components: {
         [Loading.name]: Loading,
+        [Toast.name]: Toast,
         SHeader,
         ContentView
     },
@@ -57,7 +64,26 @@ export default {
     created() {
         this.initData()
     },
+   mounted(){
+    //订阅消息（添加到购物车消息）
+    PubSub.subscribe('categroyAddToCart',(msg, goods) => {
+        if(msg === 'categroyAddToCart') {
+            //操作购物车
+            this.ADD_GOODS({
+            goodsId: goods.id,
+            goodsName: goods.name,
+            smallImage: goods.small_image,
+            goodsPrice: goods.price
+            })
+            Toast({
+            message: '添加到购物车成功！',
+            duration: 800
+            })
+        }
+        })
+    },
     methods:{
+        ...mapMutations(['ADD_GOODS']),
         //1.初始化页面数据
         async initData() {
             //1.left Data
@@ -76,8 +102,12 @@ export default {
 
             //4.初始化滚动框架
             this.$nextTick(()=>{
+                const options = {
+                    click: true,
+                    tap: true
+                }
                 this.leftScroll = new BScoll('.leftWrapper',{probeType: 3})
-                this.rightScroll = new BScoll('.rightWrapper',{probeType: 3})
+                this.rightScroll = new BScoll('.rightWrapper',options,{probeType: 3})
             })
         },
         //2.处理left click

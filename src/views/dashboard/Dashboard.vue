@@ -9,7 +9,7 @@
         <span>分类</span>
         <img slot="icon" slot-scope="props" :src="props.active ? category_icon.active : category_icon.normal" />
       </van-tabbar-item>
-      <van-tabbar-item info="3" replace to="/dashboard/cart">
+      <van-tabbar-item :info="goodsNum > 0 ? goodsNum : ''" replace to="/dashboard/cart">
         <span>购物车</span>
         <img slot="icon" slot-scope="props" :src="props.active ? cart_icon.active : cart_icon.normal" />
       </van-tabbar-item>
@@ -25,13 +25,14 @@
   </div>
 </template>
 <script>
-import Vue from 'vue'
+import { mapState, mapMutations } from 'vuex'
 import { Tabbar, TabbarItem } from 'vant'
-Vue.use(Tabbar).use(TabbarItem)
+
 export default {
-  components: {
-    
-  },
+   components: {
+        [Tabbar.name]: Tabbar,
+        [TabbarItem.name]: TabbarItem
+    },
   data() {
     return {
       active: Number(sessionStorage.getItem('tabBarActiveIndex')) || 0,
@@ -59,6 +60,28 @@ export default {
       //缓存到本地
       sessionStorage.setItem('tabBarActiveIndex', val)
     }
+  },
+  computed: {
+    ...mapState(['shopCart']),
+    goodsNum() {
+      if(this.shopCart) {
+        //总得购物车商品数量
+        let num = 0  
+        Object.values(this.shopCart).forEach((goods, index)=>{
+          num += goods.num
+        })
+        return num
+      }else {
+        return 0
+      }
+    }
+  },
+  mounted() {
+    //获取购物车数据
+    this.INIT_SHOP_CART()
+  },
+  methods: {
+    ...mapMutations(['INIT_SHOP_CART'])
   }
 }
 </script>

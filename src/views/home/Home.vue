@@ -15,16 +15,24 @@
   </div>
 </template>
 <script>
-import { Loading } from "vant"
+import { Loading, Toast } from "vant"
 import Header from "./components/header/Header"
 import Swiper from "./components/swiper/Swiper"
 import Nav from "./components/nav/Nav"
 import FlashSale from "./components/flashSale/FlashSale"
 import YouLike from "./components/youLike/YouLike"
 import { getHomeData } from "@/api/index"
+
+
+//通知订阅插件
+import PubSub from 'pubsub-js' 
+//引入Vuex
+import { mapMutations } from 'vuex'
+
 export default {
   components: {
     [Loading.name]: Loading,
+    [Toast.name]: Toast,
     Header,
     Swiper,
     Nav,
@@ -49,7 +57,27 @@ export default {
     //请求网络数据
     this.reqData()
   },
+  mounted(){
+    //订阅消息（添加到购物车消息）
+    PubSub.subscribe('homeAddToCart',(msg, goods) => {
+      if(msg === 'homeAddToCart') {
+        //操作购物车
+        this.ADD_GOODS({
+          goodsId: goods.id,
+          goodsName: goods.name,
+          smallImage: goods.small_image,
+          goodsPrice: goods.price
+        })
+        Toast({
+          message: '添加到购物车成功！',
+          duration: 800
+        })
+      }
+    })
+  },
   methods: {
+    ...mapMutations(['ADD_GOODS']),
+    //1.初始化页面数据
     async reqData() {
         let res = await getHomeData()
         if (res.success) {

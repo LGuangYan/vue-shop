@@ -1,9 +1,9 @@
-import { ADD_GOODS } from './mutations-type'
-
+import { ADD_GOODS, INIT_SHOP_CART, REDUCE_CART } from './mutations-type'
+import { getStore, setStore } from '@/utils/utils'
 
 export default {
     //1.往购物车中添加数据
-    [ADD_GOODS](state, { goodsId, goodName, smallImage, goodsPrice }) {
+    [ADD_GOODS](state, { goodsId, goodsName, smallImage, goodsPrice }) {
         let shopCart = state.shopCart
             //1.判断商品是否存在
         if (shopCart[goodsId]) { //存在
@@ -14,10 +14,41 @@ export default {
                 "id:": goodsId,
                 "name": goodsName,
                 "small_image": smallImage,
-                "price": goodsPrice
+                "price": goodsPrice,
+                "checked": true
             }
         }
         //1.2 产生新对象
         state.shopCart = {...shopCart }
+            //1.3 存入本地
+        setStore('shopCart', state.shopCart)
+    },
+
+    //2.页面初始化，获取购物车的本地数据
+    [INIT_SHOP_CART](state) {
+        let initCart = getStore('shopCart')
+        if (initCart) {
+            state.shopCart = JSON.parse(initCart)
+        }
+    },
+
+    //3.把商品移出购物车
+    [REDUCE_CART](state, { goodsId }) {
+        let shopCart = state.shopCart
+        let goods = shopCart[goodsId]
+        if (goods) { //找到该商品
+            if (goods['num'] > 0) {
+                goods[num]--
+                    //3.1判断是否为0个
+                    if (goods['num'] === 0) {
+                        delete shopCart[goodsId]
+                    }
+            } else {
+                goods = null
+            }
+            //3.2同步数据
+            state.shopCart = {...shopCart }
+            setStore('shopCart', state.shopCart)
+        }
     }
 }
