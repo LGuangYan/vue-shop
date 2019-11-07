@@ -18,11 +18,9 @@
                         
                         <span>{{goods.price | moneyFormat}}</span>
                         <div class="cartStepper">
-                            <van-stepper
-                                v-model="value" 
-                                button-size="22"
-                               
-                                />
+                            <div class="mPlus">-</div>
+                            <input class="stpInput" type="text" disabled>
+                            <div class="mReduce">+</div>
                         </div>
                     </div>
                 </li>    
@@ -38,12 +36,11 @@
     </div>
 </template>
 <script> 
-import { Checkbox, Stepper } from 'vant'
+import { Checkbox } from 'vant'
 import { mapState } from 'vuex'
 export default {
     components: {
-        [Checkbox.name]: Checkbox,
-        [Stepper.name]: Stepper
+        [Checkbox.name]: Checkbox
     },
     data() {
         return {
@@ -94,7 +91,7 @@ export default {
             margin-top: .1rem;
             flex: 1;
             background: #fff;
-             overflow: hidden;
+            overflow: hidden;
             ul{
                 height: 100%;
                 overflow-y: scroll;
@@ -139,6 +136,36 @@ export default {
                             position: absolute;
                             right: .1rem;
                             bottom: 0rem;
+                            width: .8rem;
+                            height: .22rem;
+                            display: flex;
+                            align-items: center;
+                            border:1px solid pink;
+                            .mPlus{
+                                width: .2rem;
+                                height: .2rem;
+                                font-size: .16rem;
+                                border: 1px solid pink;
+                                border-radius: 100%;
+                                line-height: .2rem;
+                                text-align: center;
+                            }
+                            .stpInput{
+                                width: .4rem;
+                                height: .2rem;
+                                font-size: .12rem;
+                                border: none;
+                                
+                            }
+                            .mReduce{
+                                width: .2rem;
+                                height: .2rem;
+                                font-size: .16rem;
+                                border: 1px solid pink;
+                                border-radius: 100%;
+                                line-height: .2rem;
+                                text-align: center;
+                            }
                         }
                     }   
                 }
