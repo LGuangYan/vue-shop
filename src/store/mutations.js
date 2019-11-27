@@ -1,6 +1,14 @@
-import { ADD_GOODS, INIT_SHOP_CART, REDUCE_CART } from './mutations-type'
-import { getStore, setStore } from '@/utils/utils'
+import {
+    ADD_GOODS,
+    INIT_SHOP_CART,
+    REDUCE_CART,
+    SELECTED_SINGER_GOODS,
+    SELECTED_ALL_GOODS,
+    CLEAR_CART
 
+} from './mutations-type'
+import { getStore, setStore } from '@/utils/utils'
+import Vue from 'vue'
 export default {
     //1.往购物车中添加数据
     [ADD_GOODS](state, { goodsId, goodsName, smallImage, goodsPrice }) {
@@ -11,7 +19,7 @@ export default {
         } else {
             shopCart[goodsId] = {
                 "num": 1,
-                "id:": goodsId,
+                "id": goodsId,
                 "name": goodsName,
                 "small_image": smallImage,
                 "price": goodsPrice,
@@ -38,7 +46,7 @@ export default {
         let goods = shopCart[goodsId]
         if (goods) { //找到该商品
             if (goods['num'] > 0) {
-                goods[num]--
+                goods['num']--
                     //3.1判断是否为0个
                     if (goods['num'] === 0) {
                         delete shopCart[goodsId]
@@ -50,5 +58,42 @@ export default {
             state.shopCart = {...shopCart }
             setStore('shopCart', state.shopCart)
         }
+    },
+
+    //4. 单个商品的选中与取消选中
+    [SELECTED_SINGER_GOODS](state, { goodsId }) {
+        let shopCart = state.shopCart
+        let goods = shopCart[goodsId]
+        if (goods) {
+            if (goods.checked) {
+                goods.checked = !goods.checked
+            } else {
+                Vue.set(goods, 'checked', true)
+            }
+            //4.1同步数据
+            state.shopCart = {...shopCart }
+            setStore('shopCart', state.shopCart)
+        }
+    },
+
+    //5. 单个商品的选中与取消选中
+    [SELECTED_ALL_GOODS](state, { isSelected }) {
+        let shopCart = state.shopCart
+        Object.values(shopCart).forEach((goods, index) => {
+            if (goods.checked) {
+                goods.checked = !isSelected
+            } else {
+                Vue.set(goods, 'checked', !isSelected)
+            }
+            //4.1同步数据
+            state.shopCart = {...shopCart }
+        })
+    },
+
+    //6.清空购物车
+    [CLEAR_CART](state) {
+        state.shopCart = null
+        state.shopCart = {...state.shopCart }
+        setStore('shopCart', state.shopCart)
     }
 }

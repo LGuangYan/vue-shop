@@ -106,7 +106,7 @@ export default {
                     click: true,
                     tap: true
                 }
-                this.leftScroll = new BScoll('.leftWrapper',{probeType: 3})
+                this.leftScroll = new BScoll('.leftWrapper',options,{probeType: 3})
                 this.rightScroll = new BScoll('.rightWrapper',options,{probeType: 3})
             })
         },

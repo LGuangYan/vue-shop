@@ -23,7 +23,6 @@ export default {
     
     addToCart(goods){
       PubSub.publish('categroyAddToCart', goods)
-      console.log('dsadasdsadasdsadasdsadas')
     }
   }
 }
